@@ -1,0 +1,7 @@
+{
+    "buildroot_build_dir": "<path_to_buildroot_build_directory>",
+    "target_ip": "<rpi_ip_address>",
+    "executable_file": "<executable_file_name>",
+    "buildroot_env": "${config:buildroot_build_dir}/host/environment-setup",
+    "host_gdb": "${config:buildroot_build_dir}/host/bin/aarch64-linux-gdb"
+}

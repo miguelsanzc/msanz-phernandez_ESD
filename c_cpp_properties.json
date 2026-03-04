@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "Buildroot-RPI",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${config:buildroot_build_dir}/host/aarch64-buildroot-linux-gnu/sysroot/usr/include"
+            ],
+            "defines": [],
+            "compilerPath": "${config:buildroot_build_dir}/host/bin/aarch64-linux-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-arm",
+            "compilerArgs": [
+                "--sysroot=${config:buildroot_build_dir}/host/arm-buildroot-linux-gnueabihf/sysroot"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "${config:buildroot_build_dir}/host/aarch64-buildroot-linux-gnu/sysroot/usr/include"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}

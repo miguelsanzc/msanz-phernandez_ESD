@@ -1,0 +1,45 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-c",
+                "source ${config:buildroot_env} && make clean all"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Deploy",
+            "type": "shell",
+            "command": "ssh root@${config:target_ip} 'rm -f /root/${config:executable_file}' && scp ${config:executable_file} root@${config:target_ip}:/root/",
+            "dependsOn": ["Build"]
+        },
+        {
+            "label": "Start GDBServer",
+            "type": "shell",
+            "command": "ssh root@${config:target_ip} 'killall -q gdbserver; gdbserver :2345 /root/${config:executable_file}'",
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": { "regexp": "." },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Process /root/.* created",
+                    "endsPattern": "Listening on port 2345"
+                }
+            },
+            "dependsOn": ["Deploy"]
+        },
+        {
+            "label": "Kill GDBServer on Target",
+            "type": "shell",
+            "command": "ssh root@${input:target_ip} 'killall -q gdbserver || true'",
+            "problemMatcher": []
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug on Target",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${config:executable_file}",
+            "args": [],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "${config:host_gdb}",
+            "miDebuggerServerAddress": "${config:target_ip}:2345",
+            "preLaunchTask": "Start GDBServer",
+            "postDebugTask": "Kill GDBServer on Target",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
