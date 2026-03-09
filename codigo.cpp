@@ -9,6 +9,7 @@
 
 #define MPU6050_ADDR 0x68
 #define ACCEL_XOUT_H 0x3B
+#define PWR_MGMT_1 0x6B
 
 int main() {
     printf("Iniciando MPU-6050...\n");
@@ -18,7 +19,7 @@ int main() {
     char i2cFile[15];
     sprintf(i2cFile, "/dev/i2c-%d", dev);
     int fd = open(i2cFile, O_RDWR);
-    
+
     if (fd < 0) {
         perror("Error al abrir el bus I2C");
         return 1;
@@ -28,11 +29,22 @@ int main() {
         perror("Error en ioctl I2C_SLAVE");
         return 1;
     }
+    char wake[2];
+    wake[0] = PWR_MGMT_1;
+    wake[1] = 0x00;
+
+    if(write(fd, wake, 2) != 2) {
+	perror("Error al despertar el sensor");
+	close(fd);
+	return 1;
+    }
+    printf("Sensor despertado con éxito");
+    usleep(100000);
 
     const int w_len = 1;
-    const int r_len = 6; 
-    
-    char write_bytes[w_len] = {ACCEL_XOUT_H}; 
+    const int r_len = 6;
+
+    char write_bytes[w_len] = {ACCEL_XOUT_H};
     char read_bytes[r_len];
 
     struct i2c_rdwr_ioctl_data packets;
@@ -68,7 +80,7 @@ int main() {
         printf("Lectura -> AccelX: %d | AccelY: %d | AccelZ: %d\n m/s2", ax, ay, az);
 
         // Frecuencia de muestreo (100ms)
-        usleep(100000); 
+        usleep(500000);
     }
     close(fd);
     printf("Sistema cerrado correctamente.\n");
